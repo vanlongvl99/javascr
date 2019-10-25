@@ -1,0 +1,119 @@
+<!Doctype html>
+<html>
+    <title>NemXienWeb</title>
+    <style>
+        .title {
+            height: 50px;
+            width: 100%;
+            background-color: #e1e1e1;
+            text-align: center;
+        }
+        #container {
+            width: 1200px;
+            height: 400px;
+            position: relative;
+            background: #21e7d7;
+            
+        }
+        #animate {
+            width: 30px;
+            height: 30px;
+            position: absolute;
+            background: red;
+            top: 320px;
+            left: 35px;
+
+        }
+        #ground {
+            width: 100px;
+            height: 50px;
+            position: absolute;
+            background: #00ff00;
+            top: 350px;
+        }
+        .inputVal {
+            background-color: blue ;
+            width: 200px;
+            height: 90px;
+            padding: 15px 10px;
+        }
+    </style>
+<body>
+    <div class="title">
+        <h1> Bài Toán Ném Xiên</h1>
+    </div>
+
+    <div class="inputVal">
+        <input type="number" placeholder="V0...(px/s)"   id="myV0"><br>
+        <input type="number" placeholder="giaToc...px/s2" id="myGiaToc"><br>
+        <input type="number" placeholder="gocBanDau...(do)  " id="myGoc"><br>
+        <button type="button" onclick="myMove();">Get Value</button>
+        <button type="button" onclick="reload()">reload</button>
+    </div>
+    <p>giả sử phạm vi có chiều rộng là 60m và chiều cao là 20m</p>
+    <div id="container">
+    <div id="ground"></div>
+    <div id="animate"></div>
+    </div>
+    <p>Vị trí ban đầu: cao 2.5m, rộng 1.75m</p>
+    <p id=>Thời gian rơi:</p>
+    <p id="ThoiGian"></p>
+
+
+    <script>
+        function reload(){
+            document.location.reload();
+        }
+        function myMove() {
+            var v0Val = document.getElementById("myV0").value;
+            var giaTocVal = document.getElementById("myGiaToc").value;
+            var gocVal = document.getElementById("myGoc").value;
+            floatV0 = parseFloat(v0Val)/50;
+            floatGiaToc = parseFloat(giaTocVal)/50000;
+            floatGoc = parseFloat(gocVal);
+            var elem = document.getElementById("animate");   
+            var pos = 0;
+            var pos1 = 0
+            var id = setInterval(frame, 1);
+            vx = floatV0*Math.cos(floatGoc/180*3.14);
+            xpoint = 35
+            ypoint = 320
+            flag = 1
+            function frame() {
+                pos++; 
+                if (ypoint < 0){
+                    flag = 0
+                }
+                if (ypoint > 370) {
+                    document.getElementById("ThoiGian").innerHTML = pos/1000
+                    clearInterval(id);
+                }
+                else if (xpoint > 1170){
+                    // pos++;
+                    ypoint = ypoint + 1;
+                    elem.style.top = ypoint + "px"; 
+
+                }
+                else if (flag == 0){
+                    pos1++
+                    vyy = -vy + floatGiaToc*pos1;
+                    ypoint = vyy*pos1;
+                    xpoint = 35 + vx*pos;
+                    elem.style.top = ypoint + "px"; 
+                    elem.style.left = xpoint + "px"; 
+                }
+                
+                else if (flag == 1) {
+                    vy = -floatV0*Math.sin(floatGoc/180*3.14) + floatGiaToc*pos;
+                    ypoint = 320 + vy*pos;
+                    xpoint = 35 + vx*pos;
+                    elem.style.top = ypoint + "px"; 
+                    elem.style.left = xpoint + "px"; 
+                }
+                
+            }    
+        }    
+    </script>
+    
+</body>
+</html>
