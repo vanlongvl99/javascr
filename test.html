@@ -1,6 +1,6 @@
 <!Doctype html>
 <html>
-    <title>NemXienWeb</title>
+    <title>test</title>
     <style>
         .title {
             height: 50px;
@@ -16,12 +16,14 @@
             
         }
         #animate {
-            width: 30px;
-            height: 30px;
+            width: 28px;
+            height: 28px;
             position: absolute;
             background: red;
             top: 320px;
             left: 35px;
+            border-radius: 50%;
+            border: 3px solid blue;
 
         }
         #ground {
@@ -50,7 +52,7 @@
         <button type="button" onclick="myMove();">Get Value</button>
         <button type="button" onclick="reload()">reload</button>
     </div>
-    <p>giả sử phạm vi có chiều rộng là 60m và chiều cao là 20m</p>
+    <p>Phạm vi có chiều rộng là 1200px và chiều cao là 400px</p>
     <div id="container">
     <div id="ground"></div>
     <div id="animate"></div>
@@ -68,45 +70,43 @@
             var v0Val = document.getElementById("myV0").value;
             var giaTocVal = document.getElementById("myGiaToc").value;
             var gocVal = document.getElementById("myGoc").value;
-            floatV0 = parseFloat(v0Val)/50;
-            floatGiaToc = parseFloat(giaTocVal)/50000;
+            floatV0 = parseFloat(v0Val);
+            floatGiaToc = parseFloat(giaTocVal);
             floatGoc = parseFloat(gocVal);
             var elem = document.getElementById("animate");   
-            var pos = 0;
-            var pos1 = 0
-            var id = setInterval(frame, 1);
-            vx = floatV0*Math.cos(floatGoc/180*3.14);
+            var time = 0;
+            var time1 = 0
+            vx = floatV0*Math.cos((floatGoc/180)*3.14); // vx(px/s)
             xpoint = 35
             ypoint = 320
             flag = 1
+            var id = setInterval(frame, 10);
             function frame() {
-                pos++; 
+                time = time + 1/100;
                 if (ypoint < 0){
                     flag = 0
                 }
                 if (ypoint > 370) {
-                    document.getElementById("ThoiGian").innerHTML = pos/1000
+                    document.getElementById("ThoiGian").innerHTML = time
                     clearInterval(id);
                 }
                 else if (xpoint > 1170){
-                    // pos++;
                     ypoint = ypoint + 1;
                     elem.style.top = ypoint + "px"; 
-
                 }
                 else if (flag == 0){
-                    pos1++
-                    vyy = -vy + floatGiaToc*pos1;
-                    ypoint = vyy*pos1;
-                    xpoint = 35 + vx*pos;
+                    time1 = time1 + 1/100
+                    vyy = -vy + floatGiaToc*time1;
+                    ypoint = -vy*time1 + 0.5*time1*time1*floatGiaToc;
+                    xpoint = 35 + vx*time;
                     elem.style.top = ypoint + "px"; 
                     elem.style.left = xpoint + "px"; 
                 }
                 
                 else if (flag == 1) {
-                    vy = -floatV0*Math.sin(floatGoc/180*3.14) + floatGiaToc*pos;
-                    ypoint = 320 + vy*pos;
-                    xpoint = 35 + vx*pos;
+                    vy = -floatV0*Math.sin((floatGoc/180)*3.14) + floatGiaToc*time;
+                    ypoint = 320 - floatV0*Math.sin((floatGoc/180)*3.14)*time + 0.5*floatGiaToc*time*time;
+                    xpoint = 35 + vx*time;
                     elem.style.top = ypoint + "px"; 
                     elem.style.left = xpoint + "px"; 
                 }
